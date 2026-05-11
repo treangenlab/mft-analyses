@@ -145,7 +145,7 @@ do
 done
 
 echo "============================================================"
-echo "All ebola Parsnp runs finished"
+echo "All adenovirus Parsnp runs finished"
 echo "============================================================"
 echo
 
@@ -155,7 +155,7 @@ echo "Writing summary to: $SUMMARY"
 echo
 
 {
-  echo "ebola Parsnp external-MUM summary"
+  echo "adenovirus Parsnp external-MUM summary"
   echo "ANI filtering skipped with --skip-ani-filter"
   echo "Generated: $(date)"
   echo
