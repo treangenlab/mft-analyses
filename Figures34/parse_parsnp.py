@@ -125,9 +125,11 @@ for folder in sorted(os.listdir(RESULTS_ROOT)):
         time_log       = os.path.join(folder_path, f"{ds}_time.log")
         # aligner_log    = os.path.join(ds_dir, "log", "parsnpAligner.log")
         vcf_pre_path   = os.path.join(ds_dir, "parsnp.vcf")
-        vcf_post_path  = os.path.join(ds_dir, "parsnp_filtered.vcf")
+        vcf_post_path  = os.path.join(ds_dir, "parsnp_filtered_short.vcf")
+        # vcf_post_path  = os.path.join(ds_dir, "parsnp_filtered.vcf")
         xmfa_pre_path  = os.path.join(ds_dir, "parsnp.xmfa")
-        xmfa_post_path = os.path.join(ds_dir, "parsnp_filtered.xmfa")
+        xmfa_post_path = os.path.join(ds_dir, "parsnp_filtered_short.xmfa")
+        # xmfa_post_path = os.path.join(ds_dir, "parsnp_filtered.xmfa")
         fp_lcbs_path   = os.path.join(ds_dir, "fp_lcbs.txt")
         ref_hits       = glob.glob(os.path.join(ds_dir, "*.ref"))
         ref_path       = ref_hits[0] if ref_hits else ""
@@ -151,7 +153,7 @@ for folder in sorted(os.listdir(RESULTS_ROOT)):
             "time_s":      time_s,
         })
 
-    out_csv = os.path.join(folder_path, "parsnp_summary.csv")
+    out_csv = os.path.join(folder_path, "parsnp_summary_short.csv")
     folder_rows = [r for r in rows if r["n"] == n_val and r["rep"] == rep]
     pd.DataFrame(folder_rows).to_csv(out_csv, index=False)
     print(f"Written: {out_csv}")

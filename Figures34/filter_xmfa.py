@@ -51,8 +51,10 @@ def parse_xmfa(input_path):
 
 def cluster_length(cluster):
     """Total alignment length summed across all sequences."""
-    return sum(end - start for start, end in cluster['seq_data'].values())
-
+    start, end = cluster['seq_data'][1]
+    length =  end-start
+    print(length)
+    return length
 
 def _sign(x):
     return 1 if x > 0 else (-1 if x < 0 else 0)
@@ -95,15 +97,22 @@ def is_collinear_insertion(accepted, cand_seq_data, ins_pos):
     return True
 
 
-def greedy_collinear_filter(clusters):
+MIN_CLUSTER_LENGTH = 50
+
+
+def greedy_collinear_filter(clusters, min_length=MIN_CLUSTER_LENGTH):
     """
     Sort clusters by total alignment length (descending), then greedily
     accept each cluster if it keeps all sequence positions collinear with
-    the already-accepted set.
+    the already-accepted set.  Clusters shorter than min_length nucleotides
+    are dropped before the greedy pass.
 
     Returns accepted clusters in reference (seq 1) start order.
     """
-    sorted_clusters = sorted(clusters, key=cluster_length, reverse=True)
+    sorted_clusters = sorted(
+        (c for c in clusters if cluster_length(c) >= min_length),
+        key=cluster_length, reverse=True,
+    )
     accepted = []  # kept sorted by seq-1 start throughout
 
     for cand in sorted_clusters:
@@ -131,9 +140,9 @@ def write_xmfa(output_path, preamble, clusters):
             out.write('=\n')
 
 
-def filter_xmfa(input_path, output_path):
+def filter_xmfa(input_path, output_path, min_length=MIN_CLUSTER_LENGTH):
     preamble, clusters = parse_xmfa(input_path)
-    accepted = greedy_collinear_filter(clusters)
+    accepted = greedy_collinear_filter(clusters, min_length=min_length)
     write_xmfa(output_path, preamble, accepted)
     removed = len(clusters) - len(accepted)
     print(f"Kept {len(accepted)} / {len(clusters)} clusters (removed {removed})")
@@ -146,5 +155,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('input',  help="Input XMFA file")
     parser.add_argument('output', help="Output XMFA file")
+    parser.add_argument('--min-length', type=int, default=MIN_CLUSTER_LENGTH,
+                        help=f"Minimum cluster length in nucleotides (default: {MIN_CLUSTER_LENGTH})")
     args = parser.parse_args()
-    filter_xmfa(args.input, args.output)
+    filter_xmfa(args.input, args.output, min_length=args.min_length)

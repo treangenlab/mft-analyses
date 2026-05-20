@@ -14,8 +14,8 @@ DATASETS = ["nucleotide", "mft_w5", "mft_w8", "mft_w11"]
 
 def process_one(ds_dir):
     xmfa_in  = os.path.join(ds_dir, "parsnp.xmfa")
-    xmfa_out = os.path.join(ds_dir, "parsnp_filtered.xmfa")
-    vcf_out  = os.path.join(ds_dir, "parsnp_filtered.vcf")
+    xmfa_out = os.path.join(ds_dir, "parsnp_filtered_short.xmfa")
+    vcf_out  = os.path.join(ds_dir, "parsnp_filtered_short.vcf")
 
     if not os.path.exists(xmfa_in):
         print(f"Skipping (no parsnp.xmfa): {ds_dir}")
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Filter parsnp.xmfa and generate VCFs across all subfolders."
     )
-    parser.add_argument("root", help="Root directory (e.g. /dodo/ab235/actual-final/adenovirus)")
+    parser.add_argument("root", help="Root directory (e.g. /dodo/ab235/actual-final/measles)")
     parser.add_argument("--workers", type=int, default=8, help="Parallel workers (default: 8)")
     args = parser.parse_args()
 
