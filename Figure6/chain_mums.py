@@ -20,6 +20,7 @@ num_workers = multiprocessing.cpu_count()
 
 # Chaining distances to sweep — MUMs within D bp of the current block end are merged
 D_values = [0, 50, 100, 150, 200, 500, 1000]
+D_values = [100]
 
 # Minimum MUM lengths to filter by before chaining
 min_length_values = [10, 20, 30]
@@ -34,7 +35,7 @@ target_files = [
 ]
 
 
-def parse_anchors(filepath, n):
+def parse_anchors(filepath, n, filter_location_inconsistent=True):
     """Return sorted list of (position, length) for all-present, location-consistent MUMs."""
     anchors = []
     with open(filepath, 'r') as f:
@@ -46,7 +47,7 @@ def parse_anchors(filepath, n):
             positions = [x.strip() for x in parts[1].split(',') if x.strip() != '']
             if len(positions) != n:
                 continue
-            if len(set(positions)) != 1:
+            if filter_location_inconsistent and len(set(positions)) != 1:
                 continue
             if int(positions[0]) + length > seq_length:
                 continue
@@ -77,7 +78,7 @@ def chain(anchors, D):
 
 def process_folder(combo):
     combo_path = os.path.join(data_root, combo)
-    out_csv    = os.path.join(combo_path, 'chained_coverage.csv')
+    out_csv    = os.path.join(combo_path, 'chained_coverage_no_filter.csv')
 
     # if os.path.exists(out_csv):
     #     return combo, 'skipped'

@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-tree_file = "/home/Users/rdd4/mft-analyses/Figure4/cov_200_parsnp_raxml/parsnp.tree"
+tree_file = "/home/Users/rdd4/mft-analyses/Figure34/cov_200_parsnp_raxml/parsnp.tree"
 out_base  = "/dodo/rdd4/mft-data/seq-gen-data-cov"
 
 n        = 200
